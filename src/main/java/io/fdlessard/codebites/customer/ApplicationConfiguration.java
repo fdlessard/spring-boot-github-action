@@ -1,5 +1,7 @@
 package io.fdlessard.codebites.customer;
 
+import io.fdlessard.codebites.customer.entities.Address;
+import io.fdlessard.codebites.customer.entities.Customer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;

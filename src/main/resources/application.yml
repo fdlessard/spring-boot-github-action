@@ -1,25 +1,52 @@
-
 server:
   port: 8080
+  forward-headers-strategy: framework
+  error:
+    whitelabel:
+      enabled: false
 
 management:
-  info:
-    git:
-      mode: full
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+    loggers:
+      enabled: true
   endpoints:
     web:
       exposure:
-        include: "*"
+        include:
+          - info
+          - health
+          - loggers
+  info:
+    git:
+      mode: full
+    java:
+      enabled: true
+    os:
+      enabled: true
+    env:
+      enabled: true
+  health:
+    db:
+      enabled: true
+    diskspace:
+      enabled: true
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
 
 logging:
   level.root: DEBUG
   #  level.org.hibernate.SQL: DEBUG
   level.liquibase: INFO
-  level.io.fdlessard.codebites.relationships: DEBUG
+  level.io.fdlessard.codebites.customer: DEBUG
 
 spring:
   application:
-    name: account-application
+    name: customer-application
   output:
     ansi:
       enabled: always

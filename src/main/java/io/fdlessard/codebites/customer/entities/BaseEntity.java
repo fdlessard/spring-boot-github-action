@@ -1,4 +1,4 @@
-package io.fdlessard.codebites.customer;
+package io.fdlessard.codebites.customer.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;

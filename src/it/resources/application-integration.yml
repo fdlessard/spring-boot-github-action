@@ -1,0 +1,49 @@
+
+management:
+  info:
+    git:
+      mode: full
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  level.root: DEBUG
+  level.liquibase: INFO
+  level.io.fdlessard.codebites.customers: DEBUG
+
+spring:
+  application:
+    name: customer-application-integration
+  output:
+    ansi:
+      enabled: always
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  jackson:
+    default-property-inclusion: non_null
+    time-zone: UTC
+    serialization:
+      write_dates_as_timestamps: false
+  datasource:
+    url: jdbc:tc:postgresql:15.3-alpine:///postgres
+    driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
+  liquibase:
+    enabled: on
+    drop-first: on
+    default-schema: public
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+      jdbc:
+        time_zone: UTC
+    show-sql: true
