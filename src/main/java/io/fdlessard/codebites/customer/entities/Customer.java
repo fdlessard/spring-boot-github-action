@@ -24,15 +24,15 @@ import java.util.List;
 public class Customer extends BaseEntity {
 
     @NotBlank(message = "lastName name cannot be blank")
-    @Size(min = 2, message = "lastName must have more thant 2 characters")
+    @Size(min = 2, message = "lastName must have more than 2 characters")
     private String lastName;
 
     @NotBlank(message = "firstName name cannot be blank")
-    @Size(min = 2, message = "firstName must have more thant 2 characters")
+    @Size(min = 2, message = "firstName must have more than 2 characters")
     private String firstName;
 
     @NotBlank(message = "company name cannot be blank")
-    @Size(min = 2, message = "company must have more thant 2 characters")
+    @Size(min = 2, message = "company must have more than 2 characters")
     private String company;
 
     @Valid

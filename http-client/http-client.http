@@ -2,5 +2,9 @@
 GET http://127.0.0.1:8080/hello
 
 ###
+# Customer - 0
+GET http://127.0.0.1:8080/customers/1
+
+###
 # Customer - findByLastName
 GET http://127.0.0.1:8080/customers/search/findByLastName?lastName=last-name-1
