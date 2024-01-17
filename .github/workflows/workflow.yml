@@ -17,4 +17,10 @@ jobs:
               gradle-version: 8.5
         - name: Execute Gradle Build
           run: ./gradlew build
+        - name: Upload Build Reports
+          uses: actions/upload-artifact@v3
+          if: always()
+          with:
+            name: build-reports
+            path: build/reports/
 
