@@ -15,4 +15,6 @@ jobs:
           uses: gradle/gradle-build-action@v2
           with:
               gradle-version: 8.5
+        - name: Execute Gradle bootJar
+          run: ./gradlew bootJar
 
