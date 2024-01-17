@@ -1,0 +1,10 @@
+name: Spring Boot Github Action Workflow
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      steps:
+        - name: Get code
+          uses: actions/checkout@v3
+
