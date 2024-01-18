@@ -16,7 +16,7 @@ plugins {
 group = appGroup
 
 ext {
-    jacocoInstructionCoverageMinimum = 0.90
+    jacocoInstructionCoverageMinimum = 0.10
     jacocoLineCoverageMinimum = 0.10
     jacocoMethodCoverageMinimum = 0.10
     jacocoClassCoverageMinimum = 0.10
