@@ -1,5 +1,9 @@
 name: Spring Boot Github Action Workflow
 on: [push, workflow_dispatch]
+permissions:
+  contents: read
+  checks: write
+  id-token: write
 jobs:
   build:
     runs-on: ubuntu-latest
