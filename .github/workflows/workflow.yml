@@ -15,12 +15,16 @@ jobs:
           uses: gradle/gradle-build-action@v2
           with:
               gradle-version: 8.5
-        - name: Execute Gradle Build
-          run: ./gradlew build
-        - name: Upload Build Reports
-          uses: actions/upload-artifact@v3
-          if: always()
-          with:
-            name: build-reports
-            path: build/reports/
+        - name: Compile
+          run: ./gradlew compileJava compileTestJava compileIntegrationTestJava
+        - name: Unit Test
+          run: ./gradlew test
+        - name: Integration Test
+          run: ./gradlew integrationTest
+#        - name: Upload Build Reports
+#          uses: actions/upload-artifact@v3
+#          if: always()
+#          with:
+#            name: build-reports
+#            path: build/reports/
 
