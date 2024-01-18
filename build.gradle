@@ -1,11 +1,13 @@
+import com.github.spotbugs.snom.Effort
+
 plugins {
     id 'org.springframework.boot' version '3.2.1'
-    id 'io.spring.dependency-management' version '1.1.2'
+    id 'io.spring.dependency-management' version '1.1.4'
     id 'java'
     id 'idea'    // optional, for IntelliJ IDEA project
     id 'jacoco'
     id 'checkstyle'
-    id 'com.github.spotbugs' version '5.0.14'
+    id 'com.github.spotbugs' version '6.0.6'
     id 'pmd'
     id 'org.owasp.dependencycheck' version '8.2.1'
     id "com.gorylenko.gradle-git-properties" version "2.4.0"
@@ -159,7 +161,7 @@ checkstyle {
 spotbugs {
     toolVersion = spotBugsToolVersion
     ignoreFailures = true
-    effort = 'max'
+    effort = Effort.MAX
     showProgress = false
 }
 
