@@ -21,6 +21,8 @@ jobs:
           run: ./gradlew test
         - name: Integration Test
           run: ./gradlew integrationTest
+        - name: Code Coverage Verification
+          run: ./gradlew jacocoTestCoverageVerification
 #        - name: Upload Build Reports
 #          uses: actions/upload-artifact@v3
 #          if: always()

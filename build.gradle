@@ -16,12 +16,12 @@ plugins {
 group = appGroup
 
 ext {
-    jacocoInstructionCoverageMinimum = 0
-    jacocoLineCoverageMinimum = 0
-    jacocoMethodCoverageMinimum = 0
-    jacocoClassCoverageMinimum = 0
-    jacocoBranchCoverageMinimum = 0
-    jacocoComplexityCoverageMinimum = 0
+    jacocoInstructionCoverageMinimum = 0.90
+    jacocoLineCoverageMinimum = 0.10
+    jacocoMethodCoverageMinimum = 0.10
+    jacocoClassCoverageMinimum = 0.10
+    jacocoBranchCoverageMinimum = 0.10
+    jacocoComplexityCoverageMinimum = 0.10
 }
 
 sourceSets {
