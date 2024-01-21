@@ -172,6 +172,10 @@ spotbugsMain {
             stylesheet = 'fancy-hist.xsl'
             outputLocation = file("build/reports/spotbugs/spotbugs.html")
         }
+        xml {
+            required = true
+            outputLocation = file("build/reports/spotbugs/spotbugs.xml")
+        }
     }
 }
 

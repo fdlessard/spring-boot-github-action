@@ -43,6 +43,10 @@ jobs:
           with:
             report_paths: '**/build/test-results/integrationTest/TEST-*.xml'
             check_name: 'JUnit Integration Test Report'
+        - uses: jwgmeligmeyling/spotbugs-github-action@master
+          with:
+            path: '**/build/reports/spotbugs/spotbugsXml.xml'
+
 
 #        - name: Upload Build Reports
 #          uses: actions/upload-artifact@v3
