@@ -29,6 +29,9 @@ jobs:
           run: ./gradlew jacocoTestCoverageVerification
         - name: Check Code Style
           run: ./gradlew checkstyleMain checkstyleTest checkstyleIntegrationTest
+        - uses: jwgmeligmeyling/checkstyle-github-action@master
+          with:
+            path: '**/build/reports/checkstyle/main.xml'
         - name: Running Spotbugs
           run: ./gradlew spotbugsMain spotbugsTest spotbugsIntegrationTest
         - uses: jwgmeligmeyling/spotbugs-github-action@master
