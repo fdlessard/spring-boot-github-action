@@ -200,7 +200,7 @@ spotbugsIntegrationTest {
 }
 
 pmd {
-    toolVersion = pmdToolVersion
+    toolVersion = '7.0.0-rc4'
     consoleOutput = false
     ignoreFailures = true
     incrementalAnalysis = true

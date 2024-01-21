@@ -25,6 +25,14 @@ jobs:
           run: ./gradlew test
         - name: Running Integration Tests
           run: ./gradlew integrationTest
+        - name: Add coverage to PR
+          id: jacoco
+          uses: madrapps/jacoco-report@v1.6.1
+          with:
+            paths: '**/build/reports/jacoco/test/jacoco-report.xml'
+            min-coverage-overall: 40
+            min-coverage-changed-files: 60
+
         - name: Code Coverage Verification
           run: ./gradlew jacocoTestCoverageVerification
         - name: Check Code Style
