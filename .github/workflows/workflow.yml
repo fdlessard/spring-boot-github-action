@@ -39,7 +39,7 @@ jobs:
             path: '**/build/reports/spotbugs/spotbugs.xml'
         - name: Running PMD
           run: ./gradlew pmdMain pmdTest pmdIntegrationTest
-        - uses: jwgmeligmeyling/jwgmeligmeyling/pmd-github-action@master
+        - uses: jwgmeligmeyling/pmd-github-action@master
           with:
             path: '**/build/reports/pmd/main.xml'
         - name: Publish Unit Test Report
