@@ -152,6 +152,10 @@ springBoot  {
     }
 }
 
+bootBuildImage{
+    imageName='customer/customer'
+}
+
 checkstyle {
     toolVersion checkstyleToolVersion
     showViolations false
