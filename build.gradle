@@ -49,6 +49,9 @@ testing {
                 java {
                     srcDirs = ['src/it/java']
                 }
+                resources {
+                    srcDirs = ['src/it/resources']
+                }
             }
         }
 
