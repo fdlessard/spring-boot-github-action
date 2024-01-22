@@ -10,12 +10,16 @@ jobs:
     steps:
         - name: Checking Out Source Code
           uses: actions/checkout@v4
-        - name: Setting Up JDK 21
+        - name: Setting Up Java to JDK 21
           uses: actions/setup-java@v4
           with:
             distribution: 'temurin'
             java-version: '21'
-        - name: Compiling
+        - name: Setup Gradle to Version 8.5
+          uses: gradle/gradle-build-action@v2
+          with:
+            gradle-version: 8.5
+        - name: Compiling Source Code
           run: ./gradlew compileJava
         - name: Running Unit Tests
           run: ./gradlew test
