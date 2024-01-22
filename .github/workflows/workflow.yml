@@ -1,4 +1,4 @@
-name: Spring Boot Github Action Workflow
+name: Spring Boot Github Action CI Workflow
 on: [push, pull_request, workflow_dispatch]
 permissions:
   contents: read
@@ -68,6 +68,15 @@ jobs:
 
         - name: Create SpringBoot Jar file
           run: ./gradlew bootJar
+
+
+        - name: Copy Jar file
+          run: mv build/libs/$(ls build/libs) app.jar
+
+        - uses: actions/upload-artifact@master
+          with:
+            name: jar-file
+            path: app.jar
 
 #        - name: Upload Build Reports
 #          uses: actions/upload-artifact@v3
