@@ -69,7 +69,6 @@ jobs:
         - name: Create SpringBoot Jar file
           run: ./gradlew bootJar
 
-
         - name: Copy Jar file
           run: mv build/libs/$(ls build/libs) app.jar
 
@@ -78,6 +77,32 @@ jobs:
             name: jar-file
             path: app.jar
 
+  build-docker-image:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@master
+        with:
+          name: jar-file
+          path: app.jar
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set env
+        run: echo "DATE=$(date +%s)" >> $GITHUB_ENV
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: fdlessard/spring-boot-github-action-app:${{ env.DATE }}
 #        - name: Upload Build Reports
 #          uses: actions/upload-artifact@v3
 #          if: always()
