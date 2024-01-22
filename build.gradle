@@ -1,12 +1,11 @@
 import com.github.spotbugs.snom.Effort
 
 plugins {
-    id 'application'
+    id 'org.springframework.boot' version '3.2.1'
+    id 'io.spring.dependency-management' version '1.1.4'
     id 'java'
     id 'jvm-test-suite'
     id 'idea'    // optional, for IntelliJ IDEA project
-    id 'org.springframework.boot' version '3.2.1'
-    id 'io.spring.dependency-management' version '1.1.4'
     id 'jacoco'
     id 'checkstyle'
     id 'com.github.spotbugs' version '6.0.6'
@@ -30,7 +29,6 @@ ext {
 
 testing {
     suites {
-
         test {
             useJUnitJupiter()
         }
@@ -72,11 +70,6 @@ sourceSets {
     }
 }
 */
-
-java {
-    sourceCompatibility = '21'
-    targetCompatibility = '21'
-}
 
 configurations {
     compileOnly {
@@ -164,6 +157,10 @@ compileTestJava {
 //    options.compilerArgs += ['-Xlint:all']
     options.encoding = 'UTF-8'
 }
+
+/*jar {
+    enabled = false
+}*/
 
 bootJar {
     archiveBaseName = appName
@@ -328,8 +325,6 @@ jacocoTestCoverageVerification {
         }
     }
 }
-
-
 
 checkstyle {
     toolVersion checkstyleToolVersion
