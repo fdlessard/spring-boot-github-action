@@ -29,19 +29,10 @@ ext {
 
 testing {
     suites {
-        test {
-            useJUnitJupiter()
-        }
         integrationTest(JvmTestSuite) {
+            useJUnitJupiter()
             dependencies {
                 implementation project()
-            }
-            targets {
-                all {
-                    testTask.configure {
-                        shouldRunAfter(test)
-                    }
-                }
             }
             sources {
                 java {
@@ -52,24 +43,12 @@ testing {
                 }
             }
         }
-
     }
 }
 
 tasks.named('check') {
     dependsOn(testing.suites.integrationTest)
 }
-
-/*
-sourceSets {
-    integrationTest {
-        java.srcDir 'src/it/java'
-        resources.srcDir 'src/it/resources'
-        compileClasspath += sourceSets.main.output + sourceSets.test.output + sourceSets.test.compileClasspath
-        runtimeClasspath += sourceSets.integrationTest.output + sourceSets.integrationTest.compileClasspath  + sourceSets.test.runtimeClasspath
-    }
-}
-*/
 
 configurations {
     compileOnly {
@@ -158,9 +137,11 @@ compileTestJava {
     options.encoding = 'UTF-8'
 }
 
-/*jar {
-    enabled = false
-}*/
+jar {
+    enabled = true
+    // putting the plain jar file in another directory, so that Dockerfile finds only proper jar in build/libs folder
+    destinationDirectory.set(file("build/libs-plain"))
+}
 
 bootJar {
     archiveBaseName = appName
@@ -190,7 +171,6 @@ springBoot  {
 
 test {
     useJUnitPlatform()
-
     testLogging {
         exceptionFormat = 'full'
         showExceptions true
@@ -215,7 +195,6 @@ test {
 
 integrationTest {
     useJUnitPlatform()
-
     testLogging {
         exceptionFormat = 'full'
         showExceptions true

@@ -65,13 +65,10 @@ jobs:
           with:
             report_paths: '**/build/test-results/integrationTest/TEST-*.xml'
             check_name: 'JUnit Integration Test Report'
-
         - name: Create SpringBoot Jar file
           run: ./gradlew bootJar
-
         - name: Copy Jar file
           run: mv build/libs/$(ls build/libs) app.jar
-
         - uses: actions/upload-artifact@master
           with:
             name: jar-file
