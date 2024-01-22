@@ -1,10 +1,12 @@
 import com.github.spotbugs.snom.Effort
 
 plugins {
+    id 'application'
+    id 'java'
+    id 'jvm-test-suite'
+    id 'idea'    // optional, for IntelliJ IDEA project
     id 'org.springframework.boot' version '3.2.1'
     id 'io.spring.dependency-management' version '1.1.4'
-    id 'java'
-    id 'idea'    // optional, for IntelliJ IDEA project
     id 'jacoco'
     id 'checkstyle'
     id 'com.github.spotbugs' version '6.0.6'
@@ -26,6 +28,38 @@ ext {
     jacocoComplexityCoverageMinimum = 0.10
 }
 
+testing {
+    suites {
+
+        test {
+            useJUnitJupiter()
+        }
+        integrationTest(JvmTestSuite) {
+            dependencies {
+                implementation project()
+            }
+            targets {
+                all {
+                    testTask.configure {
+                        shouldRunAfter(test)
+                    }
+                }
+            }
+            sources {
+                java {
+                    srcDirs = ['src/it/java']
+                }
+            }
+        }
+
+    }
+}
+
+tasks.named('check') {
+    dependsOn(testing.suites.integrationTest)
+}
+
+/*
 sourceSets {
     integrationTest {
         java.srcDir 'src/it/java'
@@ -34,9 +68,11 @@ sourceSets {
         runtimeClasspath += sourceSets.integrationTest.output + sourceSets.integrationTest.compileClasspath  + sourceSets.test.runtimeClasspath
     }
 }
+*/
 
 java {
     sourceCompatibility = '21'
+    targetCompatibility = '21'
 }
 
 configurations {
@@ -177,7 +213,28 @@ test {
     check.dependsOn jacocoTestCoverageVerification
 }
 
-task integrationTest(type: Test) {
+integrationTest {
+    useJUnitPlatform()
+
+    testLogging {
+        exceptionFormat = 'full'
+        showExceptions true
+        showCauses true
+        showStackTraces true
+        events 'passed', "skipped", 'failed', 'standardError', 'standardOut'
+    }
+    afterSuite { desc, result ->
+        if (!desc.parent) {
+            println "\nUnit Test result: ${result.resultType}"
+            println "Test summary: ${result.testCount} tests, " +
+                    "${result.successfulTestCount} succeeded, " +
+                    "${result.failedTestCount} failed, " +
+                    "${result.skippedTestCount} skipped"
+        }
+    }
+}
+
+/*task integrationTest(type: Test) {
     useJUnitPlatform()
     minHeapSize = "512m" // initial heap size
     maxHeapSize = "1024m" // maximum heap size
@@ -207,7 +264,7 @@ task integrationTest(type: Test) {
                     "${result.skippedTestCount} skipped"
         }
     }
-}
+}*/
 
 jacoco {
     toolVersion = jacocoToolVersion
