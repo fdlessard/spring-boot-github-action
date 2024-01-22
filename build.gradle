@@ -122,7 +122,7 @@ compileJava {
 }
 
 compileTestJava {
-    options.compilerArgs += ['-Xlint:all']
+//    options.compilerArgs += ['-Xlint:all']
     options.encoding = 'UTF-8'
 }
 
@@ -152,14 +152,132 @@ springBoot  {
     }
 }
 
-bootBuildImage{
-    imageName='customer/customer'
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        exceptionFormat = 'full'
+        showExceptions true
+        showCauses true
+        showStackTraces true
+        events 'passed', "skipped", 'failed', 'standardError', 'standardOut'
+    }
+    afterSuite { desc, result ->
+        if (!desc.parent) {
+            println "\nUnit Test result: ${result.resultType}"
+            println "Test summary: ${result.testCount} tests, " +
+                    "${result.successfulTestCount} succeeded, " +
+                    "${result.failedTestCount} failed, " +
+                    "${result.skippedTestCount} skipped"
+        }
+    }
+    jacoco {
+        ignoreFailures = false
+    }
+    check.dependsOn jacocoTestCoverageVerification
 }
+
+task integrationTest(type: Test) {
+    useJUnitPlatform()
+    minHeapSize = "512m" // initial heap size
+    maxHeapSize = "1024m" // maximum heap size
+    description = 'Runs the integration tests.'
+    group = 'verification'
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    outputs.upToDateWhen { false }
+    mustRunAfter test
+    check.dependsOn integrationTest // if you only want unit test, comment
+    //dependsOn jar
+
+    testLogging {
+        exceptionFormat = 'full'
+        showExceptions true
+        showCauses true
+        showStackTraces true
+        events 'passed', "skipped", 'failed'
+    }
+
+    afterSuite { desc, result ->
+        if (!desc.parent) {
+            println "\nIntegration Test result: ${result.resultType}"
+            println "Test summary: ${result.testCount} tests, " +
+                    "${result.successfulTestCount} succeeded, " +
+                    "${result.failedTestCount} failed, " +
+                    "${result.skippedTestCount} skipped"
+        }
+    }
+}
+
+jacoco {
+    toolVersion = jacocoToolVersion
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        html{
+            required = true
+        }
+        xml{
+            required = true
+            outputLocation = file("build/reports/jacoco/test/jacoco-report.xml")
+        }
+    }
+}
+
+jacocoTestCoverageVerification {
+
+    dependsOn jacocoTestReport
+    violationRules {
+        rule {
+            enabled = true
+
+            element = 'BUNDLE'
+            excludes = ['*It.class', '*It.java']
+            limit {
+                counter = 'INSTRUCTION'
+                value = 'COVEREDRATIO'
+                minimum = jacocoInstructionCoverageMinimum
+            }
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = jacocoLineCoverageMinimum
+            }
+            limit {
+                counter = 'METHOD'
+                value = 'COVEREDRATIO'
+                minimum = jacocoMethodCoverageMinimum
+            }
+            limit {
+                counter = 'CLASS'
+                value = 'COVEREDRATIO'
+                minimum = jacocoClassCoverageMinimum
+            }
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = jacocoBranchCoverageMinimum
+            }
+            limit {
+                counter = 'COMPLEXITY'
+                value = 'COVEREDRATIO'
+                minimum = jacocoComplexityCoverageMinimum
+            }
+        }
+    }
+}
+
+
 
 checkstyle {
     toolVersion checkstyleToolVersion
     showViolations false
     configFile = file('code-styles/google-checkstyle.xml')
+}
+tasks.withType(Checkstyle).each {
+    it.group = 'verification'
 }
 
 spotbugs {
@@ -210,6 +328,10 @@ pmd {
     incrementalAnalysis = true
 }
 
+tasks.withType(Pmd).each {
+    it.group = 'verification'
+}
+
 dependencyCheck {
     autoUpdate = true
     failOnError = false
@@ -224,119 +346,4 @@ gradleLint {
     alwaysRun = false
     rules = ['all-dependency']
     reportFormat = 'xml'
-}
-
-jacoco {
-    toolVersion = jacocoToolVersion
-}
-
-jacocoTestReport {
-    reports {
-        html{
-            required = true
-        }
-        xml{
-            required = true
-            outputLocation = file("build/reports/jacoco/test/jacoco-report.xml")
-        }
-    }
-}
-
-jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            enabled = true
-
-            element = 'BUNDLE'
-            excludes = ['*It.class', '*It.java']
-            limit {
-                counter = 'INSTRUCTION'
-                value = 'COVEREDRATIO'
-                minimum = jacocoInstructionCoverageMinimum
-            }
-            limit {
-                counter = 'LINE'
-                value = 'COVEREDRATIO'
-                minimum = jacocoLineCoverageMinimum
-            }
-            limit {
-                counter = 'METHOD'
-                value = 'COVEREDRATIO'
-                minimum = jacocoMethodCoverageMinimum
-            }
-            limit {
-                counter = 'CLASS'
-                value = 'COVEREDRATIO'
-                minimum = jacocoClassCoverageMinimum
-            }
-            limit {
-                counter = 'BRANCH'
-                value = 'COVEREDRATIO'
-                minimum = jacocoBranchCoverageMinimum
-            }
-            limit {
-                counter = 'COMPLEXITY'
-                value = 'COVEREDRATIO'
-                minimum = jacocoComplexityCoverageMinimum
-            }
-        }
-    }
-}
-
-test {
-    useJUnitPlatform()
-    check.dependsOn jacocoTestCoverageVerification
-    finalizedBy jacocoTestReport
-    testLogging {
-        exceptionFormat = 'full'
-        showExceptions true
-        showCauses true
-        showStackTraces true
-        events 'passed', "skipped", 'failed', 'standardError', 'standardOut'
-    }
-    jacoco {
-        enabled = true
-        ignoreFailures = false
-    }
-    afterSuite { desc, result ->
-        if (!desc.parent) {
-            println "\nUnit Test result: ${result.resultType}"
-            println "Test summary: ${result.testCount} tests, " +
-                    "${result.successfulTestCount} succeeded, " +
-                    "${result.failedTestCount} failed, " +
-                    "${result.skippedTestCount} skipped"
-        }
-    }
-}
-
-task integrationTest(type: Test) {
-    useJUnitPlatform()
-    minHeapSize = "512m" // initial heap size
-    maxHeapSize = "1024m" // maximum heap size
-    description = 'Runs the integration tests.'
-    group = 'verification'
-    classpath = sourceSets.integrationTest.runtimeClasspath
-    testClassesDirs = sourceSets.integrationTest.output.classesDirs
-    outputs.upToDateWhen { false }
-    mustRunAfter test
-    check.dependsOn integrationTest // if you only want unit test, comment
-    //dependsOn jar
-
-    testLogging {
-        exceptionFormat = 'full'
-        showExceptions true
-        showCauses true
-        showStackTraces true
-        events 'passed', "skipped", 'failed'
-    }
-
-    afterSuite { desc, result ->
-        if (!desc.parent) {
-            println "\nIntegration Test result: ${result.resultType}"
-            println "Test summary: ${result.testCount} tests, " +
-                    "${result.successfulTestCount} succeeded, " +
-                    "${result.failedTestCount} failed, " +
-                    "${result.skippedTestCount} skipped"
-        }
-    }
 }
