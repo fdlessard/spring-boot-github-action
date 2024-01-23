@@ -1,4 +1,4 @@
-package io.fdlessard.codebites;
+package io.fdlessard.codebites.customer;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JavaType;

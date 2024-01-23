@@ -1,5 +1,6 @@
 package io.fdlessard.codebites.customer;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 SpringExtension.class
         }
 )
+@Slf4j
 public class HelloControllerIt {
 
     @Autowired
@@ -36,6 +38,10 @@ public class HelloControllerIt {
 
     @Test
     public void hello() throws Exception {
+
+        logger.info("Print Constant {}", Constants.CONSTANT);
+        logger.info("Print Test Constant {}", TestConstants.TEST_CONSTANT);
+
 
         mockMvc.perform(get("/hello"))
                 .andExpect(status().is2xxSuccessful())

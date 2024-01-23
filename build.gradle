@@ -37,6 +37,9 @@ testing {
             sources {
                 java {
                     srcDirs = ['src/it/java']
+                    compileClasspath += sourceSets.test.output + sourceSets.test.compileClasspath
+      //              runtimeClasspath += sourceSets.integrationTest.output + sourceSets.integrationTest.compileClasspath  + sourceSets.test.runtimeClasspath
+
                 }
                 resources {
                     srcDirs = ['src/it/resources']

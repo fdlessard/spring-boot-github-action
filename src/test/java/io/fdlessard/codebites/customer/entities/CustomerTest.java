@@ -1,7 +1,7 @@
 package io.fdlessard.codebites.customer.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.fdlessard.codebites.TestUtils;
+import io.fdlessard.codebites.customer.TestUtils;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
@@ -14,8 +14,8 @@ import org.testcontainers.shaded.org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.IOException;
 
-import static io.fdlessard.codebites.TestUtils.buildAddress;
-import static io.fdlessard.codebites.TestUtils.buildCustomer;
+import static io.fdlessard.codebites.customer.TestUtils.buildAddress;
+import static io.fdlessard.codebites.customer.TestUtils.buildCustomer;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CustomerTest {
