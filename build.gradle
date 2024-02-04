@@ -1,19 +1,20 @@
 import com.github.spotbugs.snom.Effort
 
 plugins {
-    id 'org.springframework.boot' version '3.2.1'
+    id 'org.springframework.boot' version '3.2.2'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'java'
     id 'jvm-test-suite'
     id 'idea'    // optional, for IntelliJ IDEA project
     id 'jacoco'
     id 'checkstyle'
-    id 'com.github.spotbugs' version '6.0.6'
     id 'pmd'
+    id 'com.github.spotbugs' version '6.0.6'
     id 'org.owasp.dependencycheck' version '8.2.1'
     id "com.gorylenko.gradle-git-properties" version "2.4.0"
     id "com.github.ben-manes.versions" version "0.42.0"
     id "nebula.lint" version "17.7.0"
+    id 'com.adarshr.test-logger' version '4.0.0'
 }
 
 group = appGroup
@@ -38,7 +39,7 @@ testing {
                 java {
                     srcDirs = ['src/it/java']
                     compileClasspath += sourceSets.test.output + sourceSets.test.compileClasspath
-      //              runtimeClasspath += sourceSets.integrationTest.output + sourceSets.integrationTest.compileClasspath  + sourceSets.test.runtimeClasspath
+                    runtimeClasspath += sourceSets.integrationTest.output
 
                 }
                 resources {
@@ -80,7 +81,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     implementation 'org.projectlombok:lombok'
-
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
@@ -88,27 +88,20 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.liquibase:liquibase-core'
 
-    testAnnotationProcessor 'org.projectlombok:lombok:'
-
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
     testImplementation 'org.testcontainers:postgresql'
-
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine'
     testImplementation 'org.junit.jupiter:junit-jupiter-params'
-
     testImplementation 'nl.jqno.equalsverifier:equalsverifier:3.15.3'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.7.0'
 
-    integrationTestAnnotationProcessor 'org.projectlombok:lombok'
-    integrationTestAnnotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-
+    testAnnotationProcessor 'org.projectlombok:lombok:'
 
     integrationTestImplementation 'org.projectlombok:lombok'
-
     integrationTestImplementation 'org.junit.platform:junit-platform-runner'
     integrationTestImplementation 'org.junit.jupiter:junit-jupiter-params'
     integrationTestImplementation 'org.junit.jupiter:junit-jupiter-api'
@@ -119,15 +112,19 @@ dependencies {
     integrationTestImplementation 'org.springframework.boot:spring-boot-starter-json'
     integrationTestImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
     integrationTestImplementation 'org.springframework.cloud:spring-cloud-stream-test-binder'
-
     integrationTestImplementation 'org.testcontainers:junit-jupiter'
     integrationTestImplementation 'org.testcontainers:postgresql'
 
+    integrationTestAnnotationProcessor 'org.projectlombok:lombok'
+    integrationTestAnnotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 }
 
 java{
     sourceCompatibility = '21'
     targetCompatibility = '21'
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 compileJava {
@@ -359,7 +356,7 @@ spotbugsIntegrationTest {
 }
 
 pmd {
-    toolVersion = '7.0.0-rc4'
+    toolVersion = pmdToolVersion
     consoleOutput = false
     ignoreFailures = true
     incrementalAnalysis = true
