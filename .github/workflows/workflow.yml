@@ -65,6 +65,11 @@ jobs:
           with:
             report_paths: '**/build/test-results/integrationTest/TEST-*.xml'
             check_name: 'JUnit Integration Test Report'
+        - name: Upload JaCoCo coverage report as a workflow artifact
+          uses: actions/upload-artifact@v2
+          with:
+            name: jacoco-report
+            path: build/reports/jacoco/
         - name: Create SpringBoot Jar file
           run: ./gradlew bootJar
         - name: Copy Jar file
