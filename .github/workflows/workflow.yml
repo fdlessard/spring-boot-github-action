@@ -39,6 +39,14 @@ jobs:
           with:
             report_paths: '**/build/test-results/integrationTest/TEST-*.xml'
             check_name: 'JUnit Integration Test Report'
+        - name: Run JaCoCo Test Coverage
+          run: ./gradlew jacocoTestReport
+        - name: Upload JaCoCo Test Coverage Report
+          uses: actions/upload-artifact@v2
+          with:
+            name: jacoco-test-coverage-report
+            path: '**/build/reports/jacoco/test/'
+        - name: Code Coverage Verification
         - name: Add coverage to PR
           id: jacoco
           uses: madrapps/jacoco-report@v1.6.1
@@ -47,12 +55,7 @@ jobs:
             token: ${{ secrets.GITHUB_TOKEN }}
             min-coverage-overall: 40
             min-coverage-changed-files: 60
-        - name: Upload JaCoCo Coverage Report
-          uses: actions/upload-artifact@v2
-          with:
-            name: jacoco-coverage-report
-            path: build/reports/jacoco/
-        - name: Code Coverage Verification
+
           run: ./gradlew jacocoTestCoverageVerification
         - name: Check Code Style
           run: ./gradlew checkstyleMain checkstyleTest checkstyleIntegrationTest
