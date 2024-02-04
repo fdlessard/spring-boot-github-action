@@ -25,8 +25,20 @@ jobs:
           run: ./gradlew compileJava
         - name: Running Unit Tests
           run: ./gradlew test
+        - name: Publish Unit Test Report
+          uses: mikepenz/action-junit-report@v4
+          if: success() || failure() # always run even if the previous step fails
+          with:
+            report_paths: '**/build/test-results/test/TEST-*.xml'
+            check_name: 'JUnit Test Report'
         - name: Running Integration Tests
           run: ./gradlew integrationTest
+        - name: Publish Integration Test Report
+          uses: mikepenz/action-junit-report@v4
+          if: success() || failure() # always run even if the previous step fails
+          with:
+            report_paths: '**/build/test-results/integrationTest/TEST-*.xml'
+            check_name: 'JUnit Integration Test Report'
         - name: Add coverage to PR
           id: jacoco
           uses: madrapps/jacoco-report@v1.6.1
@@ -35,7 +47,11 @@ jobs:
             token: ${{ secrets.GITHUB_TOKEN }}
             min-coverage-overall: 40
             min-coverage-changed-files: 60
-
+        - name: Upload JaCoCo Coverage Report
+          uses: actions/upload-artifact@v2
+          with:
+            name: jacoco-coverage-report
+            path: build/reports/jacoco/
         - name: Code Coverage Verification
           run: ./gradlew jacocoTestCoverageVerification
         - name: Check Code Style
@@ -53,23 +69,9 @@ jobs:
 #        - uses: jwgmeligmeyling/pmd-github-action@master
 #          with:
 #            path: '**/build/reports/pmd/main.xml'
-        - name: Publish Unit Test Report
-          uses: mikepenz/action-junit-report@v4
-          if: success() || failure() # always run even if the previous step fails
-          with:
-            report_paths: '**/build/test-results/test/TEST-*.xml'
-            check_name: 'JUnit Test Report'
-        - name: Publish Integration Test Report
-          uses: mikepenz/action-junit-report@v4
-          if: success() || failure() # always run even if the previous step fails
-          with:
-            report_paths: '**/build/test-results/integrationTest/TEST-*.xml'
-            check_name: 'JUnit Integration Test Report'
-        - name: Upload JaCoCo coverage report as a workflow artifact
-          uses: actions/upload-artifact@v2
-          with:
-            name: jacoco-report
-            path: build/reports/jacoco/
+
+
+
         - name: Create SpringBoot Jar file
           run: ./gradlew bootJar
         - name: Copy Jar file
