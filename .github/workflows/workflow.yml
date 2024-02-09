@@ -69,8 +69,8 @@ jobs:
           with:
             name: code-checkstyle-report
             path: '**/build/reports/checkstyle/'
-        - name: Publish Unit Test Report
-        - uses: jwgmeligmeyling/checkstyle-github-action@master
+        - name: Publish Checkstyle Test Report
+          uses: jwgmeligmeyling/checkstyle-github-action@master
           with:
             path: '**/build/reports/checkstyle/main.xml'
         - name: Running Spotbugs
