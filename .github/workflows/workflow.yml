@@ -75,6 +75,11 @@ jobs:
             path: '**/build/reports/checkstyle/main.xml'
         - name: Running Spotbugs
           run: ./gradlew spotbugsMain spotbugsTest spotbugsIntegrationTest
+        - name: Upload Spotbugs Report
+          uses: actions/upload-artifact@v2
+          with:
+            name: code-spotbugs-report
+            path: '**/build/reports/spotbugs/'
         - uses: jwgmeligmeyling/spotbugs-github-action@master
           with:
             path: '**/build/reports/spotbugs/spotbugs.xml'
